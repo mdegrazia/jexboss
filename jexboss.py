@@ -345,20 +345,22 @@ def main():
     :return: Exit code
     """
     # check for Updates
-    updates = check_updates()
-    if updates:
-        print(BLUE + BOLD + "\n\n * An update is available and is recommended update before continuing.\n" +
-              "   Do you want to update now?")
-        pick = input("   YES/no ? ").lower() if version_info[0] >= 3 else raw_input("   YES/no ? ").lower()
-        print (ENDC)
-        if pick != "no":
-            updated = auto_update()
-            if updated:
-                print(GREEN + BOLD + "\n * The JexBoss has been successfully updated. Please run again to enjoy the updates.\n" +ENDC)
-                exit(0)
-            else:
-                print(RED + BOLD + "\n\n * An error occurred while updating the JexBoss. Please try again..\n" +ENDC)
-                exit(1)
+    #added in conditional statment
+    if not gl_args.disable_check_updates:
+        updates = check_updates()
+        if updates:
+            print(BLUE + BOLD + "\n\n * An update is available and is recommended update before continuing.\n" +
+                  "   Do you want to update now?")
+            pick = input("   YES/no ? ").lower() if version_info[0] >= 3 else raw_input("   YES/no ? ").lower()
+            print (ENDC)
+            if pick != "no":
+                updated = auto_update()
+                if updated:
+                    print(GREEN + BOLD + "\n * The JexBoss has been successfully updated. Please run again to enjoy the updates.\n" +ENDC)
+                    exit(0)
+                else:
+                    print(RED + BOLD + "\n\n * An error occurred while updating the JexBoss. Please try again..\n" +ENDC)
+                    exit(1)
 
     vulnerables = False
     # check vulnerabilities for standalone mode
@@ -503,7 +505,8 @@ if __name__ == "__main__":
     parser.add_argument("--auto-exploit", "-A",
                         help="Send exploit code automatically (USE ONLY IF YOU HAVE PERMISSION!!!)",
                         action='store_true')
-    parser.add_argument("--disable-check-updates", "-D", help="Disable the check for updates performed by JSP Webshell at: http://webshell.jexboss.net/jsp_version.txt",
+    #changed var dash to underscore
+    parser.add_argument("--disable_check_updates", "-D", help="Disable the check for updates performed by JSP Webshell at: http://webshell.jexboss.net/jsp_version.txt",
                         action='store_true')
     parser.add_argument('-mode', help="Operation mode", choices=['standalone', 'auto-scan', 'file-scan'], default='standalone')
 
